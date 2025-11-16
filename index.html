@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Gaga Learn: HTML / CSS / JS</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{
+             font-family: "Inter", sans-serif;
+             font-weight: 800;
+             letter-spacing: 0.3px;
+             background:#0f172a;
+         color:#e5e7eb;
+         padding:10px;
+    }
+    .app{
+      max-width:1200px;
+      margin:auto;
+      background:#020617;
+      border-radius:10px;
+      overflow:hidden;
+      border:1px solid #1e293b;
+    }
+    header{
+      padding:12px 16px;
+      background:#1f2937;
+      border-bottom:1px solid #334155;
+    }
+    header h1{font-size:18px;font-weight:700}
+    .top-bar{
+      display:flex;gap:8px;
+      padding:10px;
+      background:#020617;
+      border-bottom:1px solid #1e293b;
+    }
+    .mode-btn{
+      padding:6px 12px;border-radius:50px;
+      background:#111827;border:1px solid #374151;
+      color:#e5e7eb;cursor:pointer;font-size:13px;
+    }
+    .mode-btn.active{
+      background:#22c55e;border-color:#22c55e;color:#000;
+      font-weight:700;
+    }
+    .layout{display:flex;min-height:520px}
+    aside{
+      width:30%;border-right:1px solid #1e293b;
+      overflow-y:auto;
+      background:#020617;
+    }
+    #itemList{list-style:none}
+    #itemList li{
+      padding:10px;border-bottom:1px solid #020617;
+      cursor:pointer;font-size:13px;
+    }
+    #itemList li small{display:block;font-size:11px;opacity:.7}
+    #itemList li.active{
+      background:#22c55e22;border-left:3px solid #22c55e;
+    }
+    main{
+      width:70%;display:flex;flex-direction:column;
+      background:#020617;
+    }
+    .info{
+      padding:10px;border-bottom:1px solid #1e293b;font-size:13px;
+    }
+    .info h2{font-size:16px;margin-bottom:4px}
+    .info .sig{font-size:12px;color:#a5b4fc;margin-bottom:4px}
+    .info .desc{font-size:12px;opacity:.9}
+    .playground{flex:1;display:flex;}
+    .code-wrap,.output-wrap{
+      width:50%;display:flex;flex-direction:column;
+    }
+    .panel-head{
+      padding:8px;background:#020617;
+      border-bottom:1px solid #1e293b;font-size:12px;
+    }
+    textarea{
+      flex:1;padding:10px;background:#020617;color:#e5e7eb;
+      border:none;resize:none;font-family:monospace;
+      border-right:1px solid #1e293b;font-size:12px;
+    }
+    iframe{
+      flex:1;border:none;background:white;
+    }
+    #runBtn{
+      float:right;padding:4px 10px;border:none;
+      border-radius:5px;background:#22c55e;
+      font-weight:700;cursor:pointer;font-size:12px;
+      color:#000;
+    }
+   @media (max-width: 800px) {
+
+  body {
+    padding: 6px;
+  }
+
+  header h1 {
+    font-size: 16px;
+  }
+
+  .top-bar {
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 8px;
+  }
+
+  .mode-btn {
+    font-size: 12px;
+    padding: 5px 10px;
+  }
+
+  /* Layout becomes vertical */
+  .layout {
+    flex-direction: column;
+  }
+
+  aside {
+    width: 100%;
+    max-height: 180px;
+    border-right: none;
+    border-bottom: 1px solid #1e293b;
+  }
+
+  #itemList li {
+    font-size: 12px;
+    padding: 8px;
+  }
+
+  main {
+    width: 100%;
+  }
+
+  .info {
+    padding: 8px;
+  }
+
+  .info h2 {
+    font-size: 15px;
+  }
+
+  .info .sig,
+  .info .desc {
+    font-size: 11px;
+  }
+
+  /* Playground responsive */
+  .playground {
+    flex-direction: column;
+    height: auto;
+  }
+
+  .code-wrap,
+  .output-wrap {
+    width: 100%;
+    height: 250px;  /* better mobile height */
+  }
+
+  textarea {
+    font-size: 11px;
+    border-right: none;
+    border-bottom: 1px solid #1e293b;
+    padding: 8px;
+  }
+
+  .panel-head {
+    font-size: 11px;
+    padding: 6px 8px;
+  }
+
+  #runBtn {
+    font-size: 11px;
+    padding: 4px 8px;
+  }
+}
+
+  </style>
+</head>
+<body>
+
+<div class="app">
+
+  <header>
+    <h1>Gaga Learn: HTML / CSS / JS</h1>
+  </header>
+
+  <div class="top-bar">
+    <button class="mode-btn active" data-mode="html">HTML</button>
+    <button class="mode-btn" data-mode="css">CSS</button>
+    <button class="mode-btn" data-mode="js">JS</button>
+  </div>
+
+  <div class="layout">
+
+    <aside>
+      <ul id="itemList"></ul>
+    </aside>
+
+    <main>
+
+      <div class="info">
+        <h2 id="itemTitle">Select a tag or concept</h2>
+        <div class="sig" id="itemSignature"></div>
+        <div class="desc" id="itemDesc"></div>
+      </div>
+
+      <div class="playground">
+        <div class="code-wrap">
+          <div class="panel-head">
+            Input
+            <button id="runBtn">Run ▶</button>
+          </div>
+          <textarea id="codeInput"></textarea>
+        </div>
+
+        <div class="output-wrap">
+          <div class="panel-head">Output</div>
+          <!-- NO SANDBOX, NO SRCDOC – WE WRITE DIRECTLY -->
+          <iframe id="outputFrame"></iframe>
+        </div>
+      </div>
+
+    </main>
+
+  </div>
+
+</div>
+<!-- FIRST-TIME POPUP -->
+<div id="welcomePopup" style="
+  position: fixed;
+  top:0; left:0;
+  width:100%; height:100%;
+  background: rgba(0,0,0,0.7);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+">
+  <div style="
+    background: #ffffff;
+    color: #000;
+    width: 90%;
+    max-width: 350px;
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+    font-family: Arial, sans-serif;
+  ">
+    <h2 style="margin-bottom: 10px; font-size: 20px; font-weight: 700;">
+      Welcome to Gaga Learn 🚀
+    </h2>
+
+    <p style="font-size: 14px; line-height: 1.5; margin-bottom: 20px;">
+      Here you can learn <b>HTML, CSS, JavaScript.</b>
+      with live examples and output preview.
+    </p>
+
+    <button onclick="closeWelcome()" style="
+      padding: 10px 20px;
+      background: #22c55e;
+      color: #000;
+      border-radius: 5px;
+      font-size: 14px;
+      font-weight: 700;
+      border: none;
+      cursor: pointer;
+    ">Continue</button>
+  </div>
+</div>
+
+<script>
+
+      // First time popup logic
+  function showPopup() {
+    document.getElementById("welcomePopup").style.display = "flex";
+  }
+
+  function closeWelcome() {
+    document.getElementById("welcomePopup").style.display = "none";
+    localStorage.setItem("firstVisitDone", "true");
+  }
+
+  // Show popup first time only
+  if (!localStorage.getItem("firstVisitDone")) {
+    setTimeout(showPopup, 300); // small delay for smooth load
+  }
+/* ============================== DATA ============================== */
+
+const data = {
+  html: [
+    {
+      name:"Headings h1–h6",
+      short:"Page titles",
+      title:"Headings – h1 to h6",
+      signature:"<h1>..</h1> ... <h6>..</h6>",
+      desc:"Use headings for titles and structure. h1 is biggest, h6 is smallest.",
+      code:`<h1>Main Title (h1)</h1>
+<h2>Section Title (h2)</h2>
+<h3>Sub section (h3)</h3>
+<h4>Small heading (h4)</h4>
+<h5>Very small (h5)</h5>
+<h6>Tiny (h6)</h6>`
+    },
+    {
+      name:"Paragraph & line break",
+      short:"p, br, hr",
+      title:"Paragraph, line break, horizontal rule",
+      signature:"<p>, <br>, <hr>",
+      desc:"p = block of text, br = new line, hr = horizontal line.",
+      code:`<p>This is a paragraph with some text.</p>
+<p>This is another paragraph.<br>Here is a line break.<br>Another line.</p>
+<hr>
+<p>Text after horizontal rule.</p>`
+    },
+    {
+      name:"Link",
+      short:"a",
+      title:"Link – &lt;a&gt;",
+      signature:'<a href="https://example.com">Click</a>',
+      desc:"Use a with href to create hyperlinks.",
+      code:`<p>Go to <a href="https://developer.mozilla.org/" target="_blank">MDN Web Docs</a>.</p>`
+    },
+    {
+      name:"Image",
+      short:"img",
+      title:"Image – &lt;img&gt;",
+      signature:'<img src="url" alt="text">',
+      desc:"Display images with src and alt attributes.",
+      code:`<img src="logo (1) (1).png" alt="gag logo" width="200px" height="200px">
+<p>This is a sample image.</p>`
+    },
+    {
+      name:"Lists ul / ol / li",
+      short:"lists",
+      title:"Unordered and ordered lists",
+      signature:"<ul><li>..</li></ul> / <ol><li>..</li></ol>",
+      desc:"ul = bullet list, ol = number list, li = items.",
+      code:`<h3>Unordered list</h3>
+<ul>
+  <li>HTML</li>
+  <li>CSS</li>
+  <li>JavaScript</li>
+</ul>
+
+<h3>Ordered list</h3>
+<ol>
+  <li>Plan</li>
+  <li>Design</li>
+  <li>Code</li>
+</ol>`
+    },
+    {
+      name:"div & span",
+      short:"containers",
+      title:"Block & inline containers",
+      signature:"<div>block</div> <span>inline</span>",
+      desc:"div is block container, span is inline, both used for grouping and styling.",
+      code:`<div style="border:1px solid #333;padding:10px;margin-bottom:10px;">
+  <h3>Inside a div</h3>
+  <p>Whole box is inside one &lt;div&gt;.</p>
+</div>
+
+<p>This is a <span style="color:#22c55e;">colored word</span> using span.</p>`
+    },
+    {
+      name:"Form basic",
+      short:"form, input, button",
+      title:"Simple form",
+      signature:"<form>..</form>",
+      desc:"Form groups inputs that can be submitted.",
+      code:`<form>
+  <label>
+    Name:
+    <input type="text" placeholder="Your name">
+  </label>
+  <br><br>
+  <label>
+    Email:
+    <input type="email" placeholder="you@example.com">
+  </label>
+  <br><br>
+  <button type="submit">Submit</button>
+</form>`
+    },
+    {
+      name:"Input types",
+      short:"text, number, checkbox, radio",
+      title:"Different input types",
+      signature:"type='text' / 'number' / 'checkbox' / 'radio'",
+      desc:"Change input behaviour using type attribute.",
+      code:`<p><input type="text" placeholder="Text input"></p>
+<p><input type="number" value="10"></p>
+<p><label><input type="checkbox"> I agree</label></p>
+<p>
+  <label><input type="radio" name="x" checked> Option A</label>
+  <label><input type="radio" name="x"> Option B</label>
+</p>`
+    },
+    {
+      name:"textarea / select",
+      short:"multi-line & dropdown",
+      title:"Textarea, select, option",
+      signature:"<textarea> / <select><option>",
+      desc:"Use textarea for multi-line text and select/option for dropdowns.",
+      code:`<p>
+  <label>Comments:<br>
+    <textarea rows="4" cols="30"></textarea>
+  </label>
+</p>
+
+<p>
+  <label>Country:
+    <select>
+      <option>India</option>
+      <option>USA</option>
+      <option>UK</option>
+    </select>
+  </label>
+</p>`
+    },
+    {
+      name:"Table",
+      short:"table, tr, th, td",
+      title:"Table structure",
+      signature:"<table><tr><th>..</th></tr></table>",
+      desc:"Tables show tabular data using rows and cells.",
+      code:`<table border="1" cellpadding="6">
+  <tr>
+    <th>Student</th>
+    <th>Score</th>
+  </tr>
+  <tr>
+    <td>Gaga</td>
+    <td>95</td>
+  </tr>
+  <tr>
+    <td>Alex</td>
+    <td>88</td>
+  </tr>
+</table>`
+    },
+    {
+      name:"Semantic layout",
+      short:"header, nav, section, footer",
+      title:"Semantic layout tags",
+      signature:"<header> <nav> <section> <footer>",
+      desc:"Give meaning to layout sections for SEO and accessibility.",
+      code:`<header style="background:#111827;color:white;padding:10px;">
+  <h2>My Site</h2>
+</header>
+<nav style="background:#1f2937;color:white;padding:6px;">
+  Home | About | Contact
+</nav>
+<section style="padding:10px;">
+  <h3>Main Content</h3>
+  <p>Here goes the main article content.</p>
+</section>
+<footer style="background:#111827;color:white;padding:10px;">
+  © 2025 Gaga
+</footer>`
+    }
+  ],
+
+  css: [
+    {
+      name:"font-size",
+      short:"text size",
+      title:"font-size property",
+      signature:"font-size: 24px;",
+      desc:"Controls how large text appears.",
+      code:`<style>
+.big { font-size:32px; }
+.small { font-size:12px; }
+</style>
+
+<p class="big">Big text example</p>
+<p class="small">Small text example</p>`
+    },
+    {
+      name:"font-family",
+      short:"font style",
+      title:"font-family property",
+      signature:'font-family: "Arial", sans-serif;',
+      desc:"Changes font style.",
+      code:`<style>
+.serif   { font-family: "Georgia", serif; }
+.sansserif { font-family: "Arial", sans-serif; }
+</style>
+
+<p class="serif">This uses a serif font.</p>
+<p class="sansserif">This uses a sans-serif font.</p>`
+    },
+    {
+      name:"color / background-color",
+      short:"text + background",
+      title:"color and background-color",
+      signature:"color:#22c55e; background-color:#111827;",
+      desc:"Set text and background colors.",
+      code:`<style>
+.box {
+  color:#22c55e;
+  background-color:#111827;
+  padding:15px;
+}
+</style>
+
+<div class="box">Green text on dark background.</div>`
+    },
+    {
+      name:"margin & padding",
+      short:"spacing",
+      title:"margin and padding",
+      signature:"margin:20px; padding:10px;",
+      desc:"margin = outside space, padding = inside space.",
+      code:`<style>
+.card {
+  border:1px solid #22c55e;
+  margin:20px;
+  padding:15px;
+}
+</style>
+
+<div class="card">
+  <h3>Card Title</h3>
+  <p>Margins separate from other elements, padding creates space inside.</p>
+</div>`
+    },
+    {
+      name:"border & radius",
+      short:"border & rounded",
+      title:"border / border-radius",
+      signature:"border:1px solid; border-radius:8px;",
+      desc:"Draws a border and rounds corners.",
+      code:`<style>
+.rounded {
+  border:2px solid #22c55e;
+  border-radius:12px;
+  padding:15px;
+}
+</style>
+
+<div class="rounded">Rounded card with border.</div>`
+    },
+    {
+      name:"width & height",
+      short:"box size",
+      title:"width & height",
+      signature:"width:200px; height:100px;",
+      desc:"Controls element dimensions.",
+      code:`<style>
+.box {
+  width:200px;
+  height:100px;
+  background:#1e293b;
+}
+</style>
+
+<div class="box"></div>`
+    },
+    {
+      name:"display types",
+      short:"block/inline/inline-block",
+      title:"display property",
+      signature:"display:block | inline | inline-block",
+      desc:"Controls how elements flow in layout.",
+      code:`<style>
+.block { display:block; background:#1e293b; margin:4px 0; }
+.inline { display:inline; background:#1e293b; }
+.inline-block { display:inline-block; background:#1e293b; padding:4px; margin:2px; }
+</style>
+
+<span class="block">Block 1</span>
+<span class="block">Block 2</span>
+<p>
+  <span class="inline">inline A</span>
+  <span class="inline">inline B</span>
+</p>
+<p>
+  <span class="inline-block">IB 1</span>
+  <span class="inline-block">IB 2</span>
+</p>`
+    },
+    {
+      name:"Flexbox",
+      short:"display:flex",
+      title:"Flexbox row",
+      signature:"display:flex; gap:10px;",
+      desc:"Align items in a row with flexbox.",
+      code:`<style>
+.row {
+  display:flex;
+  gap:10px;
+}
+.item {
+  flex:1;
+  background:#111827;
+  border-radius:6px;
+  text-align:center;
+  padding:10px;
+}
+</style>
+
+<div class="row">
+  <div class="item">One</div>
+  <div class="item">Two</div>
+  <div class="item">Three</div>
+</div>`
+    },
+    {
+      name:"position",
+      short:"relative / absolute / fixed",
+      title:"position property",
+      signature:"position:relative | absolute | fixed",
+      desc:"Controls how elements are placed.",
+      code:`<style>
+.wrap {
+  position:relative;
+  height:120px;
+  border:1px solid #334155;
+}
+.box {
+  width:60px;height:60px;background:#22c55e;
+  position:absolute;top:30px;left:30px;
+}
+</style>
+
+<div class="wrap">
+  <div class="box"></div>
+</div>`
+    },
+    {
+      name:"transition",
+      short:"smooth hover",
+      title:"transition",
+      signature:"transition: all .3s;",
+      desc:"Animates property changes.",
+      code:`<style>
+.btn {
+  background:#22c55e;
+  color:black;
+  padding:10px 16px;
+  border-radius:6px;
+  text-decoration:none;
+  display:inline-block;
+  transition:transform .2s, box-shadow .2s;
+}
+.btn:hover {
+  transform:translateY(-2px);
+  box-shadow:0 8px 20px rgba(0,0,0,.5);
+}
+</style>
+
+<a href="#" class="btn">Hover me</a>`
+    }
+  ],
+
+  js: [
+    {
+      name:"alert() popup",
+      short:"basic popup",
+      title:"alert()",
+      signature:"alert('Hello');",
+      desc:"Shows a simple popup dialog.",
+      code:`<button onclick="alert('Hello Gaga!')">Show popup</button>`
+    },
+    {
+      name:"console.log()",
+      short:"log message",
+      title:"console.log",
+      signature:"console.log('msg');",
+      desc:"Prints messages to browser console (F12).",
+      code:`<button onclick="console.log('Logging from Gaga app'); alert('Open console (F12)');">
+Log to console
+</button>`
+    },
+    {
+      name:"Inline function",
+      short:"function in onclick",
+      title:"Function example",
+      signature:"function greet(name){ ... }",
+      desc:"Small function defined inside event handler.",
+      code:`<button onclick="(function greet(name){ alert('Hello ' + name + '!'); })('Gaga');">
+Run function
+</button>`
+    },
+    {
+      name:"Change text",
+      short:"DOM text",
+      title:"Change element text",
+      signature:"document.getElementById('id').textContent",
+      desc:"Use JS to modify page content.",
+      code:`<p id="msg">Old text</p>
+<button onclick="document.getElementById('msg').textContent='New text from JavaScript';">
+Change text
+</button>`
+    },
+    {
+      name:"Change style",
+      short:"DOM style",
+      title:"Change CSS with JS",
+      signature:"element.style.color = 'red';",
+      desc:"Modify inline styles from JS.",
+      code:`<p id="colorText">I will turn green.</p>
+<button onclick="var el=document.getElementById('colorText'); el.style.color='#22c55e'; el.style.fontWeight='700';">
+Make green
+</button>`
+    },
+    {
+      name:"Simple counter",
+      short:"click count",
+      title:"Click counter",
+      signature:"count++",
+      desc:"Remember state in a variable.",
+      code:`<p id="count">Clicked 0 times</p>
+<button onclick="window.cnt=(window.cnt||0)+1;document.getElementById('count').textContent='Clicked '+window.cnt+' times';">
+Click me
+</button>`
+    },
+    {
+      name:"setInterval timer",
+      short:"timer",
+      title:"setInterval",
+      signature:"setInterval(fn, 1000);",
+      desc:"Run code every second.",
+      code:`<p id="timer">Seconds: 0</p>
+<button onclick="if(window.t){return;}window.sec=0;window.t=setInterval(function(){window.sec++;document.getElementById('timer').textContent='Seconds: '+window.sec;},1000);">
+Start timer
+</button>`
+    },
+    {
+      name:"Prompt name",
+      short:"prompt()",
+      title:"prompt()",
+      signature:"var name = prompt('Name?');",
+      desc:"Ask user for input in a popup.",
+      code:`<button onclick="var n=prompt('What is your name?'); if(n){alert('Hello '+n+'!');}">
+Ask name
+</button>`
+    }
+  ]
+};
+
+/* ============================== APP LOGIC ============================== */
+
+let currentMode = "html";
+let currentIndex = 0;
+
+const itemList = document.getElementById("itemList");
+const itemTitle = document.getElementById("itemTitle");
+const itemSignature = document.getElementById("itemSignature");
+const itemDesc = document.getElementById("itemDesc");
+const codeInput = document.getElementById("codeInput");
+const outputFrame = document.getElementById("outputFrame");
+const runBtn = document.getElementById("runBtn");
+const modeBtns = document.querySelectorAll(".mode-btn");
+
+function loadList() {
+  itemList.innerHTML = "";
+  data[currentMode].forEach((item, i) => {
+    const li = document.createElement("li");
+    li.innerHTML = `<strong>${item.name}</strong><small>${item.short}</small>`;
+    li.addEventListener("click", () => {
+      currentIndex = i;
+      applyItem();
+      highlight();
+    });
+    itemList.appendChild(li);
+  });
+}
+
+function highlight() {
+  [...itemList.children].forEach(li => li.classList.remove("active"));
+  if (itemList.children[currentIndex]) {
+    itemList.children[currentIndex].classList.add("active");
+  }
+}
+
+function applyItem() {
+  const item = data[currentMode][currentIndex];
+  itemTitle.textContent = item.title;
+  itemSignature.textContent = item.signature;
+  itemDesc.textContent = item.desc;
+  codeInput.value = item.code;
+  run();
+}
+
+function run() {
+  const code = codeInput.value;
+  const doc = outputFrame.contentDocument || outputFrame.contentWindow.document;
+  doc.open();
+  doc.write(code);
+  doc.close();
+}
+
+modeBtns.forEach(btn => {
+  btn.addEventListener("click", () => {
+    modeBtns.forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+    currentMode = btn.dataset.mode;
+    currentIndex = 0;
+    loadList();
+    applyItem();
+  });
+});
+
+runBtn.addEventListener("click", run);
+
+// initial load
+loadList();
+applyItem();
+</script>
+
+</body>
+</html>
